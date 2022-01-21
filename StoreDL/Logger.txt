@@ -1,0 +1,7 @@
+2022-01-18 09:36:06.759 -08:00 [INF] new user added to database test4
+2022-01-18 13:09:53.093 -08:00 [INF] new product added to database 0 pepsi 2
+2022-01-18 13:49:27.530 -08:00 [INF] new product added to store inventory 12204
+2022-01-18 13:50:13.761 -08:00 [INF] new product added to store inventory 10154
+2022-01-18 13:50:52.640 -08:00 [INF] new product added to store inventory 3254
+2022-01-18 13:51:47.658 -08:00 [INF] new order from User 1/18/2022saiyan48.00
+2022-01-18 13:52:27.955 -08:00 [INF] new user added to database jkjk
