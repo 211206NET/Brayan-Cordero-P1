@@ -100,6 +100,36 @@ public class DBREPO : IRepo
         return allStores;
     }
 
+    //Get all stores address only
+    public List<StoreAddressOnly> GetAllStoresAddress()
+    {
+        List<StoreAddressOnly> allStores = new List<StoreAddressOnly>();
+        using (SqlConnection connection = new SqlConnection(_connectionString))
+        {
+            connection.Open();
+            string queryTxt = "SELECT*FROM StoreFront";
+
+            using (SqlCommand cmd = new SqlCommand(queryTxt, connection))
+            {
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        StoreAddressOnly store = new StoreAddressOnly();
+                        store.ID = reader.GetInt32(0);
+                        store.Name = reader.GetString(1);
+                        store.Address = reader.GetString(2);
+                        store.City = reader.GetString(3);
+                        store.State = reader.GetString(4);
+                        allStores.Add(store);
+                    }
+                }
+            }
+            connection.Close();
+        }
+        return allStores;
+    }
+
     //List of cutomer orders
     public List<Order> AllOrders(Customer incomingCustomer)
     {

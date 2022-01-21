@@ -4,6 +4,7 @@ public interface IRepo
 {
 
     List<Storefront> GetAllStores();
+    List<StoreAddressOnly> GetAllStoresAddress();
 
     void AddStore(Storefront StoreToAdd);
 

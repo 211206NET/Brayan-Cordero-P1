@@ -18,6 +18,11 @@ public class StoreBL : IBL
         return _dl.GetAllStores();
     }
 
+    public List<StoreAddressOnly> GetAllStoresAddress()
+    {
+        return _dl.GetAllStoresAddress();
+    }
+
     public void AddStore(Storefront StoreToAdd)
     {
         _dl.AddStore(StoreToAdd);

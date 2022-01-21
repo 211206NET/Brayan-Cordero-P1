@@ -1,10 +1,13 @@
 using Models;
+
+
 namespace BL;
 
 public interface IBL
 {
 
     List<Storefront> GetAllStores();
+    List<StoreAddressOnly> GetAllStoresAddress();
 
     void AddStore(Storefront StoreToAdd);
 

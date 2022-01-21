@@ -12,13 +12,9 @@ public class Storefront
     public string? State {get; set; }
     public string? City {get; set; }
     public List<Inventory> Inventories { get; set; }
-    public List<Order> Orders { get; set; } 
+    public List<Order> Orders { get; set; }
 
-    // public Storefront(){
-    //     this.Inventories = new List<Inventory>();
-    //     this.Orders = new List<Order>();
-    // } 
-
+   
 
 
 

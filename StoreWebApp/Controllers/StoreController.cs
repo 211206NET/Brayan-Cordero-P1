@@ -18,9 +18,9 @@ namespace StoreWebApp.Controllers
         }
         // GET: api/<StoreController>
         [HttpGet]
-        public List<Storefront>  Get()
+        public List<StoreAddressOnly>  Get()
         {
-            return _bl.GetAllStores();
+            return _bl.GetAllStoresAddress();
         }
 
         // GET api/<StoreController>/5
