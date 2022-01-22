@@ -25,12 +25,13 @@ namespace StoreWebApp.Controllers
 
         // GET api/<StoreController>/5
         [HttpGet("{id}")]
-        public ActionResult<Storefront> Get(int id)
+        public ActionResult<List<Inventory>> Get(int id)
         {
-            Storefront storeFound =  _bl.GetStoreById(id);
-            if(storeFound.ID != 0)
+            
+            List<Inventory> inv = _bl.StoreInventory(id);
+            if(id != 0)
             {
-                return Ok(storeFound);
+                return Ok(inv);
             }
             else
             {

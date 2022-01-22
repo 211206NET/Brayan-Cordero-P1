@@ -78,12 +78,12 @@ public class DBREPO : IRepo
         {
             connection.Open();
             string queryTxt = "SELECT*FROM StoreFront";
-            
-            using(SqlCommand cmd = new SqlCommand(queryTxt, connection))
+
+            using (SqlCommand cmd = new SqlCommand(queryTxt, connection))
             {
-                using(SqlDataReader reader = cmd.ExecuteReader())
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    while(reader.Read())
+                    while (reader.Read())
                     {
                         Storefront store = new Storefront();
                         store.ID = reader.GetInt32(0);
@@ -94,7 +94,7 @@ public class DBREPO : IRepo
                         allStores.Add(store);
                     }
                 }
-            } 
+            }
             connection.Close();
         }
         return allStores;
@@ -161,14 +161,14 @@ public class DBREPO : IRepo
     }
 
         //Inventory for stores
-    public List<Inventory> StoreInventory(Storefront IncomingStore)
+    public List<Inventory> StoreInventory(int storeId)
     {
-        Storefront incomingStore = IncomingStore;
+        //Storefront incomingStore = IncomingStore;
         List<Inventory> storeInventory = new List<Inventory>();
         using (SqlConnection connection = new SqlConnection(_connectionString))
         {
             connection.Open();
-            string queryTxt = $"SELECT Inventory.ID, Inventory.Quantity, Inventory.ID,Product.Name,Product.Description, Product.Price, StoreFront_ID FROM Inventory INNER JOIN Product ON Inventory.ProductID = Product.ID WHERE StoreFront_ID='{IncomingStore.ID}'";
+            string queryTxt = $"SELECT Inventory.ID, Inventory.Quantity, Inventory.ID,Product.Name,Product.Description, Product.Price, StoreFront_ID FROM Inventory INNER JOIN Product ON Inventory.ProductID = Product.ID WHERE StoreFront_ID='{storeId}'";
             
             
             using(SqlCommand cmd = new SqlCommand(queryTxt, connection))
@@ -187,6 +187,7 @@ public class DBREPO : IRepo
                         storeProduct.Price = reader.GetDecimal(5);
                         inventory.Item = storeProduct;
                         storeProduct.ID=reader.GetInt32(2);
+                        inventory.ProductID = storeProduct.ID;
                         storeInventory.Add(inventory);
                     }
                 }
@@ -375,6 +376,7 @@ public class DBREPO : IRepo
 
     public Storefront GetStoreById(int storeId)
     {
+        
         string query = "SELECT * FROM StoreFront WHERE ID = @StoreId ";
         using SqlConnection connection = new SqlConnection(_connectionString);
         connection.Open();
@@ -395,4 +397,70 @@ public class DBREPO : IRepo
         connection.Close();
         return store;
     }
+
+    public Customer GetCustomerById(int customerId)
+    {
+
+        string query = "SELECT * FROM Customer WHERE ID = @customerId ";
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        connection.Open();
+        using SqlCommand cmd = new SqlCommand(query, connection);
+        SqlParameter param = new SqlParameter("@customerID", customerId);
+        cmd.Parameters.Add(param);
+
+        using SqlDataReader reader = cmd.ExecuteReader();
+        Customer customer = new Customer();
+        if (reader.Read())
+        {
+            customer.Id= reader.GetInt32(0);
+            customer.UserName = reader.GetString(1);
+            customer.Password = reader.GetString(2);
+            customer.Email = reader.GetString(3);
+           
+        }
+        connection.Close();
+        return customer;
+    }
+
+    //public List<Storefront> GetAllStores()
+    //{
+    //    List<Storefront> allStores = new List<Storefront>();
+
+    //    using SqlConnection connection = new SqlConnection(_connectionString);
+    //    string storeSelect = "SELECT * FROM StoreFront";
+    //    string inventorySelect = "SELECT * From Inventory";
+    //    string orderSelect = "SELECT * FROM Orders";
+
+    //    DataSet StoreSet = new DataSet();
+
+    //    using SqlDataAdapter storeAdapter = new SqlDataAdapter(storeSelect, connection);
+    //    using SqlDataAdapter inventoryAdapter = new SqlDataAdapter(inventorySelect, connection);
+    //    using SqlDataAdapter orderAdapter = new SqlDataAdapter(orderSelect, connection);
+
+    //    storeAdapter.Fill(StoreSet, "StoreFront");
+    //    inventoryAdapter.Fill(StoreSet, "Inventory");
+    //    orderAdapter.Fill(StoreSet, "Orders");
+
+    //    DataTable? StoreTable = StoreSet.Tables["StoreFront"];
+    //    DataTable? InventoryTable = StoreSet.Tables["Inventory"];
+    //    DataTable? OrderTable = StoreSet.Tables["Orders"];
+
+    //    if(StoreTable != null)
+    //    {
+    //        foreach(DataRow row in StoreTable.Rows)
+    //        {
+    //            Storefront store = new Storefront(row);
+    //            if (InventoryTable != null)
+    //            {
+    //                store.Inventories = InventoryTable.AsEnumerable().Where(r => (int) r["ID"] == store.ID).Select(r => new Inventory(r).ToString();
+
+    //            }
+    //        }
+    //    }
+
+    //}
+
+
+
+
 }

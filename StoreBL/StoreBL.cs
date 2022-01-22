@@ -47,4 +47,17 @@ public class StoreBL : IBL
     {
         return _dl.GetStoreById(storeId);
     }
+
+    public List<Inventory> StoreInventory(int storeId)
+    {
+        return _dl.StoreInventory(storeId);
+    }
+
+    public Customer GetCustomerById(int customerId)
+    {
+        return _dl.GetCustomerById(customerId);
+    }
+
+
+
 }

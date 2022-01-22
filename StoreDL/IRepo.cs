@@ -16,6 +16,11 @@ public interface IRepo
 
     Storefront GetStoreById(int storeId);
 
+    List<Inventory> StoreInventory(int storeId);
 
-    
+    Customer GetCustomerById(int customerId);
+
+
+
+
 }

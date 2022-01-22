@@ -1,4 +1,5 @@
 namespace Models;
+using System.Data;
 
 public class Inventory 
 {
@@ -7,7 +8,14 @@ public class Inventory
     public int ProductID { get; set; }
     public int Quantity { get; set; }
     public Product Item { get; set; }
-    
 
+    //public Inventory(DataRow r)
+    //{
+    //    this.ID = (int)r["ID"];
+    //    this.StoreId = (int) r["StoreId"];
+    //    this.ProductID = (int) r["ProductID"];
+    //    this.Quantity= (int) r["Quantity"];
+       
+    //}
 }
 

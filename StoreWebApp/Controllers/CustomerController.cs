@@ -1,4 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Models;
+using BL;
+using CustomExceptions;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,24 +12,47 @@ namespace StoreWebApp.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
+        private IBL _bl;
+        public CustomerController(IBL bl)
+        {
+            _bl = bl;
+        }
+
         // GET: api/<CustomerController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public List<Customer> Get()
         {
-            return new string[] { "value1", "value2" };
+            return _bl.GetAllCustomers();
         }
 
         // GET api/<CustomerController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ActionResult<Customer> Get(int id)
         {
-            return "value";
+            Customer customerFound = _bl.GetCustomerById(id);
+            if (customerFound.Id != 0)
+            {
+                return Ok(customerFound);
+            }
+            else
+            {
+                return NoContent();
+            }
         }
 
         // POST api/<CustomerController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult Post([FromBody] Customer customerToAdd)
         {
+            try
+            {
+                _bl.AddCustomer(customerToAdd);
+                return Created("Successfully added", customerToAdd);
+            }
+            catch (DuplicateRecordException ex)
+            {
+                return Conflict(ex.Message);
+            }
         }
 
         // PUT api/<CustomerController>/5

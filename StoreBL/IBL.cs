@@ -19,4 +19,8 @@ public interface IBL
 
     Storefront GetStoreById(int storeId);
 
+    List<Inventory> StoreInventory(int storeId);
+
+    Customer GetCustomerById(int customerId);
+
 }
