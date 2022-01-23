@@ -345,7 +345,7 @@ public class DBREPO : IRepo
     }
 
     //Add new Store to DB
-        public void AddStore(Storefront newStore)
+        public void AddStore(StoreAddressOnly newStore)
     {
         DataSet customerSet = new DataSet();
         string selectCmd = "SELECT*FROM StoreFront";

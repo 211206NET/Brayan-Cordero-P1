@@ -23,7 +23,7 @@ public class StoreBL : IBL
         return _dl.GetAllStoresAddress();
     }
 
-    public void AddStore(Storefront StoreToAdd)
+    public void AddStore(StoreAddressOnly StoreToAdd)
     {
         _dl.AddStore(StoreToAdd);
     }

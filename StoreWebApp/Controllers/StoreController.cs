@@ -41,7 +41,7 @@ namespace StoreWebApp.Controllers
 
         // POST api/<StoreController>
         [HttpPost]
-        public ActionResult Post([FromBody] Storefront storeToAdd)
+        public ActionResult Post([FromBody] StoreAddressOnly storeToAdd)
         {
             try
             {
