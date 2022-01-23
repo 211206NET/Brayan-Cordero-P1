@@ -58,6 +58,15 @@ public class StoreBL : IBL
         return _dl.GetCustomerById(customerId);
     }
 
+    public List<Order> AllOrders(int StoreId)
+    {
+        return _dl.AllOrders(StoreId);
+    }
+
+    public void DeleteStore(int storeId)
+    {
+        _dl.DeleteStore(storeId);
+    }
 
 
 }

@@ -24,12 +24,30 @@ namespace StoreWebApp.Controllers
         }
 
         // GET api/<StoreController>/5
-        [HttpGet("{id}")]
+        [HttpGet("[action]/{id}")]
+        [ActionName("GetInventory")]
         public ActionResult<List<Inventory>> Get(int id)
         {
             
             List<Inventory> inv = _bl.StoreInventory(id);
             if(id != 0)
+            {
+                return Ok(inv);
+            }
+            else
+            {
+                return NoContent();
+            }
+        }
+
+        // GET api/<StoreController>/5
+        [HttpGet("[action]/{Storeid}")]
+        [ActionName("GetOrders")]
+        public ActionResult<List<Order>> GetOrders(int Storeid)
+        {
+
+            List<Order> inv = _bl.AllOrders(Storeid);
+            if (Storeid != 0)
             {
                 return Ok(inv);
             }
@@ -55,15 +73,17 @@ namespace StoreWebApp.Controllers
         }
 
         // PUT api/<StoreController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+        //[HttpPut("{id}")]
+        //public void Put(int id, [FromBody] string value)
+        //{
+        //}
 
         // DELETE api/<StoreController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            _bl.DeleteStore(id);
+
         }
     }
 }

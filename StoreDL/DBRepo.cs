@@ -131,13 +131,13 @@ public class DBREPO : IRepo
     }
 
     //List of cutomer orders
-    public List<Order> AllOrders(Customer incomingCustomer)
+    public List<Order> AllOrders(int StoreId)
     {
         List<Order> allOrders = new List<Order>();
         using (SqlConnection connection = new SqlConnection(_connectionString))
         {
             connection.Open();
-            string queryTxt = $"SELECT Orders.ID, Orders.OrderDate, Storefront.Name, Customer.Username, Orders.TOTAL FROM Orders INNER JOIN Customer ON Orders.Customer_ID = Customer.ID INNER JOIN Storefront ON Orders.StoreFront_ID = Storefront.ID WHERE Customer_ID='{incomingCustomer.Id}'";
+            string queryTxt = $"SELECT Orders.ID, Orders.OrderDate, Storefront.Name, Customer.Username, Orders.TOTAL FROM Orders INNER JOIN Customer ON Orders.Customer_ID = Customer.ID INNER JOIN Storefront ON Orders.StoreFront_ID = Storefront.ID WHERE Customer_ID='{StoreId}'";
             
             using(SqlCommand cmd = new SqlCommand(queryTxt, connection))
             {
@@ -422,43 +422,24 @@ public class DBREPO : IRepo
         return customer;
     }
 
-    //public List<Storefront> GetAllStores()
-    //{
-    //    List<Storefront> allStores = new List<Storefront>();
+    public void DeleteStore(int storeId)
+    {
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        connection.Open();
+        //Deletes storefront and inventory of selected storefront from DB
+       
+        string sqlDelStore = $"DELETE FROM StoreFront WHERE ID = {storeId}";
+        string sqlDelInventory = $"DELETE FROM Inventory WHERE StoreFront_ID = {storeId}";
+         
+        using SqlCommand cmdDelStore = new SqlCommand(sqlDelStore, connection);
+        using SqlCommand cmdDelInventory = new SqlCommand(sqlDelInventory, connection);
+       
+        cmdDelStore.ExecuteNonQuery();
+        cmdDelInventory.ExecuteNonQuery();
+        connection.Close();
+        
 
-    //    using SqlConnection connection = new SqlConnection(_connectionString);
-    //    string storeSelect = "SELECT * FROM StoreFront";
-    //    string inventorySelect = "SELECT * From Inventory";
-    //    string orderSelect = "SELECT * FROM Orders";
-
-    //    DataSet StoreSet = new DataSet();
-
-    //    using SqlDataAdapter storeAdapter = new SqlDataAdapter(storeSelect, connection);
-    //    using SqlDataAdapter inventoryAdapter = new SqlDataAdapter(inventorySelect, connection);
-    //    using SqlDataAdapter orderAdapter = new SqlDataAdapter(orderSelect, connection);
-
-    //    storeAdapter.Fill(StoreSet, "StoreFront");
-    //    inventoryAdapter.Fill(StoreSet, "Inventory");
-    //    orderAdapter.Fill(StoreSet, "Orders");
-
-    //    DataTable? StoreTable = StoreSet.Tables["StoreFront"];
-    //    DataTable? InventoryTable = StoreSet.Tables["Inventory"];
-    //    DataTable? OrderTable = StoreSet.Tables["Orders"];
-
-    //    if(StoreTable != null)
-    //    {
-    //        foreach(DataRow row in StoreTable.Rows)
-    //        {
-    //            Storefront store = new Storefront(row);
-    //            if (InventoryTable != null)
-    //            {
-    //                store.Inventories = InventoryTable.AsEnumerable().Where(r => (int) r["ID"] == store.ID).Select(r => new Inventory(r).ToString();
-
-    //            }
-    //        }
-    //    }
-
-    //}
+    }
 
 
 
