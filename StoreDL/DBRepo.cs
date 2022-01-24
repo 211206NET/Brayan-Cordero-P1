@@ -130,14 +130,14 @@ public class DBREPO : IRepo
         return allStores;
     }
 
-    //List of cutomer orders
-    public List<Order> AllOrders(int StoreId)
+    //List of cutomer orders by customer ID
+    public List<Order> AllOrders(int CustomerID)
     {
         List<Order> allOrders = new List<Order>();
         using (SqlConnection connection = new SqlConnection(_connectionString))
         {
             connection.Open();
-            string queryTxt = $"SELECT Orders.ID, Orders.OrderDate, Storefront.Name, Customer.Username, Orders.TOTAL FROM Orders INNER JOIN Customer ON Orders.Customer_ID = Customer.ID INNER JOIN Storefront ON Orders.StoreFront_ID = Storefront.ID WHERE Customer_ID='{StoreId}'";
+            string queryTxt = $"SELECT Orders.ID, Orders.OrderDate, Storefront.Name, Customer.Username, Orders.TOTAL FROM Orders INNER JOIN Customer ON Orders.Customer_ID = Customer.ID INNER JOIN Storefront ON Orders.StoreFront_ID = Storefront.ID WHERE Customer_ID='{CustomerID}'";
             
             using(SqlCommand cmd = new SqlCommand(queryTxt, connection))
             {
@@ -160,7 +160,37 @@ public class DBREPO : IRepo
         return allOrders;
     }
 
-        //Inventory for stores
+    //All StoreOrders by storeID
+    public List<StoreOrders> AllStoreOrders(int StoreId)
+    {
+        List<StoreOrders> allOrders = new List<StoreOrders>();
+        using (SqlConnection connection = new SqlConnection(_connectionString))
+        {
+            connection.Open();
+            string queryTxt = $"SELECT*FROM Orders WHERE StoreFront_ID = {StoreId}";
+
+            using (SqlCommand cmd = new SqlCommand(queryTxt, connection))
+            {
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        StoreOrders order = new StoreOrders();
+                        order.OrderNumber = reader.GetInt32(0);
+                        order.OrderDate = reader.GetString(1);
+                        order.StoreID = reader.GetInt32(2);
+                        order.CustomerID = reader.GetInt32(3);
+                        order.Total = reader.GetDecimal(4);
+                        allOrders.Add(order);
+                    }
+                }
+            }
+            connection.Close();
+        }
+        return allOrders;
+    }
+
+    //Inventory for stores
     public List<Inventory> StoreInventory(int storeId)
     {
         //Storefront incomingStore = IncomingStore;
@@ -373,7 +403,7 @@ public class DBREPO : IRepo
             }
         }
     }
-
+    //Get Store info by Id
     public Storefront GetStoreById(int storeId)
     {
         
@@ -397,7 +427,7 @@ public class DBREPO : IRepo
         connection.Close();
         return store;
     }
-
+    //Get Customer info by Id
     public Customer GetCustomerById(int customerId)
     {
 
@@ -422,6 +452,31 @@ public class DBREPO : IRepo
         return customer;
     }
 
+    //Get Product info by Id
+    public Product GetProductById(int productId)
+    {
+
+        string query = "SELECT * FROM Product WHERE ID = @productId ";
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        connection.Open();
+        using SqlCommand cmd = new SqlCommand(query, connection);
+        SqlParameter param = new SqlParameter("@productId", productId);
+        cmd.Parameters.Add(param);
+
+        using SqlDataReader reader = cmd.ExecuteReader();
+        Product product = new Product();
+        if (reader.Read())
+        {
+            product.ID = reader.GetInt32(0);
+            product.ProductName = reader.GetString(1);
+            product.Description = reader.GetString(2);
+            product.Price = reader.GetDecimal(3);
+
+        }
+        connection.Close();
+        return product;
+    }
+    //DeleteStore form DB using StoreId
     public void DeleteStore(int storeId)
     {
         using SqlConnection connection = new SqlConnection(_connectionString);
@@ -440,7 +495,36 @@ public class DBREPO : IRepo
         
 
     }
+    //DeleteCustomer form DB using CustomerId
+    public void DeleteCustomer(int CustomerId)
+    {
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        connection.Open();
+        
+        string sqlDelCustomer = $"DELETE FROM Customer WHERE ID = {CustomerId}";
+       
+        using SqlCommand cmdDelCustomer = new SqlCommand(sqlDelCustomer, connection);
+        
+        cmdDelCustomer.ExecuteNonQuery();
+        connection.Close();
+    }
 
+    //DeleteProduct from DB using ProductID
+    public void DeleteProduct(int ProductId)
+    {
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        connection.Open();
+
+        string sqlDelProduct = $"DELETE FROM Product WHERE ID = {ProductId}";
+        string sqLDelFromInventory = $"DELETE FROM Inventory WHERE ProductID ={ProductId}";
+
+        using SqlCommand cmdDelProduct = new SqlCommand(sqlDelProduct, connection);
+        using SqlCommand cmdDelFromInventory = new SqlCommand(sqLDelFromInventory, connection);
+
+        cmdDelFromInventory.ExecuteNonQuery();
+        cmdDelProduct.ExecuteNonQuery();
+        connection.Close();
+    }
 
 
 

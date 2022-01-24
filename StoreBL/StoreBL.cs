@@ -58,15 +58,43 @@ public class StoreBL : IBL
         return _dl.GetCustomerById(customerId);
     }
 
-    public List<Order> AllOrders(int StoreId)
+    public List<Order> AllOrders(int CustomerId)
     {
-        return _dl.AllOrders(StoreId);
+        return _dl.AllOrders(CustomerId);
     }
 
+    public List<StoreOrders> AllStoreOrders(int StoreId)
+    {
+        return _dl.AllStoreOrders(StoreId);
+    }
+
+    public List<Product> AllProducts()
+    {
+        return _dl.AllProducts();
+    }
+
+    public Product GetProductById(int productId)
+    {
+        return _dl.GetProductById(productId);
+    }
+
+    public void AddProduct(Product productToAdd)
+    {
+        _dl.AddProduct(productToAdd);
+    }
     public void DeleteStore(int storeId)
     {
         _dl.DeleteStore(storeId);
     }
 
+    public void DeleteCustomer(int CustomerId)
+    {
+        _dl.DeleteCustomer(CustomerId);
+    }
+
+    public void DeleteProduct(int ProductId)
+    {
+        _dl.DeleteProduct(ProductId);
+    }
 
 }

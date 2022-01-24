@@ -20,9 +20,21 @@ public interface IRepo
 
     Customer GetCustomerById(int customerId);
 
-    List<Order> AllOrders(int StoreId);
+    List<Order> AllOrders(int CustomerId);
+
+    List<StoreOrders> AllStoreOrders(int StoreId);
+
+    List<Product> AllProducts();
+
+    Product GetProductById(int productId);
+
+    void AddProduct(Product productToAdd);
 
     public void DeleteStore(int storeId);
+
+    public void DeleteCustomer(int CustomerId);
+
+    public void DeleteProduct(int ProductId);
 
 
 }

@@ -41,13 +41,13 @@ namespace StoreWebApp.Controllers
         }
 
         // GET api/<StoreController>/5
-        [HttpGet("[action]/{Storeid}")]
+        [HttpGet("[action]/{StoreId}")]
         [ActionName("GetOrders")]
-        public ActionResult<List<Order>> GetOrders(int Storeid)
+        public ActionResult<List<StoreOrders>> GetOrders(int StoreId)
         {
 
-            List<Order> inv = _bl.AllOrders(Storeid);
-            if (Storeid != 0)
+            List<StoreOrders> inv = _bl.AllStoreOrders(StoreId);
+            if (StoreId != 0)
             {
                 return Ok(inv);
             }

@@ -26,13 +26,31 @@ namespace StoreWebApp.Controllers
         }
 
         // GET api/<CustomerController>/5
-        [HttpGet("{id}")]
+        [HttpGet("[action]/{id}")]
+        [ActionName("GetCustomer")]
         public ActionResult<Customer> Get(int id)
         {
             Customer customerFound = _bl.GetCustomerById(id);
             if (customerFound.Id != 0)
             {
                 return Ok(customerFound);
+            }
+            else
+            {
+                return NoContent();
+            }
+        }
+
+        // GET api/<StoreController>/5
+        [HttpGet("[action]/{StoreId}")]
+        [ActionName("GetOrders")]
+        public ActionResult<List<Order>> GetOrders(int StoreId)
+        {
+
+            List<Order> order = _bl.AllOrders(StoreId);
+            if (StoreId != 0)
+            {
+                return Ok(order);
             }
             else
             {
@@ -56,15 +74,17 @@ namespace StoreWebApp.Controllers
         }
 
         // PUT api/<CustomerController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+        //[HttpPut("{id}")]
+        //public void Put(int id, [FromBody] string value)
+        //{
+        //}
 
-        // DELETE api/<CustomerController>/5
+        //DELETE api/<CustomerController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            _bl.DeleteCustomer(id);
+
         }
     }
 }
