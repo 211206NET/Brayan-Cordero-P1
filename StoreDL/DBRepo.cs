@@ -316,7 +316,7 @@ public class DBREPO : IRepo
     }
 
     //Add to inventory
-    public void AddToInventory(Inventory inventoryToAdd)
+    public void AddToInventory(AddtoInventory productToAddToInventory)
     {
         DataSet customerSet = new DataSet();
         string selectCmd = "SELECT*FROM Inventory";
@@ -329,17 +329,17 @@ public class DBREPO : IRepo
 
                 DataTable customerTable = customerSet.Tables["Inventory"];
                 DataRow newRow = customerTable.NewRow();
-                    newRow["Quantity"]= inventoryToAdd.Quantity;
-                    newRow["ProductID"]= inventoryToAdd.ProductID;
-                    newRow["StoreFront_ID"]=inventoryToAdd.StoreId;
+                    newRow["Quantity"]= productToAddToInventory.Quantity;
+                    newRow["ProductID"]= productToAddToInventory.ProductID;
+                    newRow["StoreFront_ID"]=productToAddToInventory.StoreId;
                 customerTable.Rows.Add(newRow);
                 
-                string insertCmd = $"INSERT INTO Inventory (Quantity, ProductID, StoreFront_ID) VALUES ('{inventoryToAdd.Quantity}','{inventoryToAdd.ProductID}','{inventoryToAdd.StoreId}')";
+                string insertCmd = $"INSERT INTO Inventory (Quantity, ProductID, StoreFront_ID) VALUES ('{productToAddToInventory.Quantity}','{productToAddToInventory.ProductID}','{productToAddToInventory.StoreId}')";
                 
                 dataAdapter.InsertCommand= new SqlCommand(insertCmd, connection);
                 
                 dataAdapter.Update(customerTable);
-                Log.Information("new product added to store inventory {ProductID}{Quantity}{StoreFront}", inventoryToAdd.ProductID, inventoryToAdd.Quantity, inventoryToAdd.StoreId);
+                Log.Information("new product added to store inventory {ProductID}{Quantity}{StoreFront}", productToAddToInventory.ProductID, productToAddToInventory.Quantity, productToAddToInventory.StoreId);
             }
         }
     }
@@ -485,12 +485,15 @@ public class DBREPO : IRepo
        
         string sqlDelStore = $"DELETE FROM StoreFront WHERE ID = {storeId}";
         string sqlDelInventory = $"DELETE FROM Inventory WHERE StoreFront_ID = {storeId}";
+        string sqlDelFromOrders = $"DELETE FROM Orders WHERE StoreFront_ID = {storeId}";
          
         using SqlCommand cmdDelStore = new SqlCommand(sqlDelStore, connection);
         using SqlCommand cmdDelInventory = new SqlCommand(sqlDelInventory, connection);
-       
-        cmdDelStore.ExecuteNonQuery();
+        using SqlCommand cmdDelFromOrders = new SqlCommand(sqlDelFromOrders, connection);
+
         cmdDelInventory.ExecuteNonQuery();
+        cmdDelFromOrders.ExecuteNonQuery();
+        cmdDelStore.ExecuteNonQuery();
         connection.Close();
         
 
@@ -502,9 +505,12 @@ public class DBREPO : IRepo
         connection.Open();
         
         string sqlDelCustomer = $"DELETE FROM Customer WHERE ID = {CustomerId}";
+        string sqlDelCustomerOrder = $"DELETE FROM Orders WHERE Customer_ID = {CustomerId}";
        
         using SqlCommand cmdDelCustomer = new SqlCommand(sqlDelCustomer, connection);
-        
+        using SqlCommand cmdDelCustomerOrder = new SqlCommand(sqlDelCustomerOrder, connection);
+
+        cmdDelCustomerOrder.ExecuteNonQuery();
         cmdDelCustomer.ExecuteNonQuery();
         connection.Close();
     }

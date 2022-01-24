@@ -41,13 +41,30 @@ namespace StoreWebApp.Controllers
             }
         }
         // POST api/<ProductController>
-        [HttpPost]
+        [HttpPost("[action]")]
+        [ActionName("newProduct")]
         public ActionResult Post([FromBody] Product newProduct)
         {
             try
             {
                 _bl.AddProduct(newProduct);
                 return Created("Successfully added", newProduct);
+            }
+            catch (DuplicateRecordException ex)
+            {
+                return Conflict(ex.Message);
+            }
+        }
+
+        // POST api/<ProductController>
+        [HttpPost("[action]")]
+        [ActionName("AddToInventory")]
+        public ActionResult AddToInventory([FromBody] AddtoInventory newInventory)
+        {
+            try
+            {
+                _bl.AddToInventory(newInventory);
+                return Created("Successfully added", newInventory);
             }
             catch (DuplicateRecordException ex)
             {

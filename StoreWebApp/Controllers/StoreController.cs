@@ -3,6 +3,8 @@ using Models;
 using BL;
 using CustomExceptions;
 
+
+
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace StoreWebApp.Controllers
@@ -11,6 +13,7 @@ namespace StoreWebApp.Controllers
     [ApiController]
     public class StoreController : ControllerBase
     {
+        
         private IBL _bl;
         public StoreController(IBL bl)
         {
@@ -59,7 +62,7 @@ namespace StoreWebApp.Controllers
 
         // POST api/<StoreController>
         [HttpPost]
-        public ActionResult Post([FromBody] StoreAddressOnly storeToAdd)
+        public ActionResult AddnewStore([FromBody] StoreAddressOnly storeToAdd)
         {
             try
             {

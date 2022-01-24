@@ -7,6 +7,7 @@ public interface IRepo
     List<StoreAddressOnly> GetAllStoresAddress();
 
     void AddStore(StoreAddressOnly StoreToAdd);
+    void AddToInventory(AddtoInventory inventoryToAdd);
 
     List<Customer> GetAllCustomers();
 

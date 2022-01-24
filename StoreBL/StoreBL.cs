@@ -26,6 +26,12 @@ public class StoreBL : IBL
     public void AddStore(StoreAddressOnly StoreToAdd)
     {
         _dl.AddStore(StoreToAdd);
+
+    }
+
+    public void AddToInventory(AddtoInventory inventoryToAdd)
+    {
+        _dl.AddToInventory(inventoryToAdd);
     }
 
     public List<Customer> GetAllCustomers()

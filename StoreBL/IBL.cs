@@ -10,6 +10,7 @@ public interface IBL
     List<StoreAddressOnly> GetAllStoresAddress();
 
     void AddStore(StoreAddressOnly StoreToAdd);
+    void AddToInventory(AddtoInventory inventoryToAdd);
 
 
     List<Customer> GetAllCustomers();
