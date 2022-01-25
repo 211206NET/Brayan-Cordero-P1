@@ -1,5 +1,6 @@
 using StoreDL;
 using BL;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,11 @@ builder.Services.AddSwaggerGen();
 // Registering our deps here for dependency injection
 builder.Services.AddScoped<IRepo>(ctx => new DBREPO (builder.Configuration.GetConnectionString("STOREDB")));
 builder.Services.AddScoped<IBL, StoreBL>();
+
+//Setting up Serilog
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.File("../StoreDL/Logger.txt")
+    .CreateLogger();
 
 var app = builder.Build();
 

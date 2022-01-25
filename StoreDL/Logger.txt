@@ -5,3 +5,13 @@
 2022-01-18 13:50:52.640 -08:00 [INF] new product added to store inventory 3254
 2022-01-18 13:51:47.658 -08:00 [INF] new order from User 1/18/2022saiyan48.00
 2022-01-18 13:52:27.955 -08:00 [INF] new user added to database jkjk
+2022-01-24 18:11:03.273 -08:00 [INF] new user added to database testing
+2022-01-24 18:22:02.448 -08:00 [INF] new storefront created stringstringstringstring
+2022-01-24 18:23:08.878 -08:00 [INF] new product added to database 0 Testing 3.5
+2022-01-24 18:24:34.820 -08:00 [INF] new product added to store inventory 151011
+2022-01-24 18:27:11.699 -08:00 [INF] new product added to store inventory 21011
+2022-01-24 18:29:02.999 -08:00 [INF] new user added to database Logger
+2022-01-24 18:31:32.818 -08:00 [INF] new order from User 1/24/202214211.00
+2022-01-24 18:33:39.725 -08:00 [INF] Customer Deleted 14
+2022-01-24 18:34:04.266 -08:00 [INF] Product Deleted 15
+2022-01-24 18:34:29.037 -08:00 [INF] Store Deleted 11

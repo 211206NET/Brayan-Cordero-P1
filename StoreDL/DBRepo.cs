@@ -369,7 +369,7 @@ public class DBREPO : IRepo
                 dataAdapter.InsertCommand= new SqlCommand(insertCmd, connection);
                 
                 dataAdapter.Update(orderTable);
-                //Log.Information("new order from User {OrderDate}{Customer_ID}{StoreFront_ID}{TOTAL}", OrderDate, CustomerId, StoreId, Total);
+                Log.Information("new order from User {OrderDate}{Customer_ID}{StoreFront_ID}{TOTAL}", OrderDate, CustomerId, StoreId, Total);
             }
         }
     }
@@ -557,7 +557,9 @@ public class DBREPO : IRepo
         cmdDelFromOrders.ExecuteNonQuery();
         cmdDelStore.ExecuteNonQuery();
         connection.Close();
-        
+
+        Log.Information("Store Deleted {storeId}", storeId);
+
 
     }
     //DeleteCustomer form DB using CustomerId
@@ -575,6 +577,7 @@ public class DBREPO : IRepo
         cmdDelCustomerOrder.ExecuteNonQuery();
         cmdDelCustomer.ExecuteNonQuery();
         connection.Close();
+        Log.Information("Customer Deleted {CustomerId}", CustomerId);
     }
 
     //DeleteProduct from DB using ProductID
@@ -592,6 +595,7 @@ public class DBREPO : IRepo
         cmdDelFromInventory.ExecuteNonQuery();
         cmdDelProduct.ExecuteNonQuery();
         connection.Close();
+        Log.Information("Product Deleted {ProductID}", ProductId);
     }
 
     //Clear Cart after checkout
