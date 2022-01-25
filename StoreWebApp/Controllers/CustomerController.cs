@@ -42,13 +42,13 @@ namespace StoreWebApp.Controllers
         }
 
         // GET api/<StoreController>/5
-        [HttpGet("[action]/{StoreId}")]
+        [HttpGet("[action]/{CustomerId}")]
         [ActionName("GetOrders")]
-        public ActionResult<List<Order>> GetOrders(int StoreId)
+        public ActionResult<List<Order>> GetOrders(int CustomerId)
         {
 
-            List<Order> order = _bl.AllOrders(StoreId);
-            if (StoreId != 0)
+            List<Order> order = _bl.AllOrders(CustomerId);
+            if (CustomerId != 0)
             {
                 return Ok(order);
             }
@@ -100,7 +100,7 @@ namespace StoreWebApp.Controllers
         // POST api/<CustomerController>
         [HttpPost("[action]")]
         [ActionName("Checkout")]
-        public ActionResult Chechout([FromBody] InfoForCheckout infoForCheckout)
+        public ActionResult Checkout([FromBody] InfoForCheckout infoForCheckout)
         {
             string OrderDate = DateOnly.FromDateTime(DateTime.Now).ToString();
             List<CustomerCart> cart = _bl.GetCart();
@@ -113,7 +113,7 @@ namespace StoreWebApp.Controllers
                 _bl.AddToOrders(checkout.cartTotal, infoForCheckout.StoreId, infoForCheckout.CustomerId, OrderDate);
                 _bl.ClearCart();
 
-                return Content($"Successfully Checkout \n Total: {checkout.cartTotal} \n, Thank you for your purchase :)");
+                return Content($"Successfully Checkout \n Total: {checkout.cartTotal} \n, Thank you :)");
             }
             else 
             {

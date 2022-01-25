@@ -43,6 +43,22 @@ namespace StoreWebApp.Controllers
             }
         }
 
+        [HttpGet("[action]/{id}")]
+        [ActionName("GetStoreById")]
+        public ActionResult<StoreAddressOnly> GetStoreById(int id)
+        {
+
+            StoreAddressOnly inv = _bl.GetStoresAddressById(id);
+            if (id != 0)
+            {
+                return Ok(inv);
+            }
+            else
+            {
+                return NoContent();
+            }
+        }
+
         // GET api/<StoreController>/5
         [HttpGet("[action]/{StoreId}")]
         [ActionName("GetOrders")]

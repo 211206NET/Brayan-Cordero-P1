@@ -6,6 +6,8 @@ public interface IRepo
     List<Storefront> GetAllStores();
     List<StoreAddressOnly> GetAllStoresAddress();
 
+    StoreAddressOnly GetStoresAddressById(int storeId);
+
     void AddStore(StoreAddressOnly StoreToAdd);
     void AddToInventory(AddtoInventory inventoryToAdd);
 
