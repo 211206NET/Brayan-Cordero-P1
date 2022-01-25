@@ -34,6 +34,11 @@ public class StoreBL : IBL
         _dl.AddToInventory(inventoryToAdd);
     }
 
+    public void AddToCart(Cart addToCart)
+    {
+        _dl.AddToCart(addToCart);
+    }
+
     public List<Customer> GetAllCustomers()
     {
         return _dl.GetAllCustomers();
@@ -84,9 +89,19 @@ public class StoreBL : IBL
         return _dl.GetProductById(productId);
     }
 
+    public List<CustomerCart> GetCart()
+    {
+        return _dl.GetCart();
+    }
+
     public void AddProduct(Product productToAdd)
     {
         _dl.AddProduct(productToAdd);
+    }
+
+    public void AddToOrders(decimal Total, int StoreId, int CustomerId, string OrderDate)
+    {
+        _dl.AddToOrders(Total, StoreId, CustomerId, OrderDate);
     }
     public void DeleteStore(int storeId)
     {
@@ -101,6 +116,11 @@ public class StoreBL : IBL
     public void DeleteProduct(int ProductId)
     {
         _dl.DeleteProduct(ProductId);
+    }
+
+    public void ClearCart()
+    {
+        _dl.ClearCart();
     }
 
 }

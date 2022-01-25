@@ -345,7 +345,7 @@ public class DBREPO : IRepo
     }
 
     //add new order
-    public void AddToOrders(Customer incomingCustomer, Storefront selectedStore,Order incomingOrder)
+    public void AddToOrders(decimal Total, int StoreId, int CustomerId, string OrderDate)
     {
         DataSet orderSet = new DataSet();
         string selectCmd = "SELECT*FROM Orders";
@@ -358,18 +358,18 @@ public class DBREPO : IRepo
 
                 DataTable orderTable = orderSet.Tables["Orders"];
                 DataRow newRow = orderTable.NewRow();
-                    newRow["OrderDate"]= incomingOrder.OrderDate;
-                    newRow["StoreFront_ID"]= selectedStore.ID;
-                    newRow["Customer_ID"]=incomingCustomer.Id;
-                    newRow["TOTAL"] = incomingOrder.Total;
+                    newRow["OrderDate"]= OrderDate;
+                    newRow["StoreFront_ID"]= StoreId;
+                    newRow["Customer_ID"]=CustomerId;
+                    newRow["TOTAL"] = Total;
                 orderTable.Rows.Add(newRow);
                 
-                string insertCmd = $"INSERT INTO Orders (OrderDate, StoreFront_ID, Customer_ID, TOTAL) VALUES ('{incomingOrder.OrderDate}', '{selectedStore.ID}', '{incomingCustomer.Id}', '{incomingOrder.Total}')";
+                string insertCmd = $"INSERT INTO Orders (OrderDate, StoreFront_ID, Customer_ID, TOTAL) VALUES ('{OrderDate}', '{StoreId}', '{CustomerId}', '{Total}')";
                 
                 dataAdapter.InsertCommand= new SqlCommand(insertCmd, connection);
                 
                 dataAdapter.Update(orderTable);
-                Log.Information("new order from User {OrderDate}{username}{StoreFront_ID}{TOTAL}", incomingOrder.OrderDate, incomingCustomer.UserName, selectedStore.ID, incomingOrder.Total);
+                //Log.Information("new order from User {OrderDate}{Customer_ID}{StoreFront_ID}{TOTAL}", OrderDate, CustomerId, StoreId, Total);
             }
         }
     }
@@ -403,6 +403,68 @@ public class DBREPO : IRepo
             }
         }
     }
+
+    // Add Products to Cart 
+    public void AddToCart(Cart addToCart)
+    {
+        DataSet CartSet = new DataSet();
+        string selectCmd = "SELECT*FROM Cart";
+        using (SqlConnection connection = new SqlConnection(_connectionString))
+        {
+            using (SqlDataAdapter dataAdapter = new SqlDataAdapter(selectCmd, connection))
+            {
+
+                dataAdapter.Fill(CartSet, "Cart");
+
+                DataTable cartTable = CartSet.Tables["Cart"];
+                DataRow newRow = cartTable.NewRow();
+                newRow["Product_ID"] = addToCart.productId;
+                newRow["Quantity"] = addToCart.Quantity;
+               
+                cartTable.Rows.Add(newRow);
+
+                string insertCmd = $"INSERT INTO Cart (Product_ID, QUANTITY) VALUES ('{addToCart.productId}', '{addToCart.Quantity}')";
+
+                dataAdapter.InsertCommand = new SqlCommand(insertCmd, connection);
+
+                dataAdapter.Update(cartTable);
+                
+            }
+        }
+    }
+
+    //Get Customer Cart
+    public List<CustomerCart> GetCart()
+    {
+        List<CustomerCart> allProduct = new List<CustomerCart>();
+        using (SqlConnection connection = new SqlConnection(_connectionString))
+        {
+            connection.Open();
+            string queryTxt = "SELECT Product.ID, Product.Name, Product.Description, Product.Price, Cart.QUANTITY FROM Cart INNER JOIN Product ON Cart.Product_ID = Product.ID";
+
+            using (SqlCommand cmd = new SqlCommand(queryTxt, connection))
+            {
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        CustomerCart cart = new CustomerCart();
+                        cart.productId = reader.GetInt32(0);
+                        cart.productName = reader.GetString(1);
+                        cart.productDescription = reader.GetString(2);
+                        cart.productPrice = reader.GetDecimal(3);
+                        cart.quantity = reader.GetInt32(4);
+                        allProduct.Add(cart);
+                    }
+                }
+            }
+            connection.Close();
+        }
+        return allProduct;
+    }
+
+
+
     //Get Store info by Id
     public Storefront GetStoreById(int storeId)
     {
@@ -530,6 +592,19 @@ public class DBREPO : IRepo
         cmdDelFromInventory.ExecuteNonQuery();
         cmdDelProduct.ExecuteNonQuery();
         connection.Close();
+    }
+
+    //Clear Cart after checkout
+    public void ClearCart()
+    {
+        using SqlConnection connection = new SqlConnection(_connectionString);
+        connection.Open();
+
+        string sqlClearCart = $"DELETE FROM Cart";
+        using SqlCommand cmdClearCart = new SqlCommand( sqlClearCart, connection);
+        
+        cmdClearCart.ExecuteNonQuery();
+        connection.Close ();
     }
 
 

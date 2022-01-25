@@ -12,6 +12,8 @@ public interface IBL
     void AddStore(StoreAddressOnly StoreToAdd);
     void AddToInventory(AddtoInventory inventoryToAdd);
 
+    void AddToCart(Cart addToCart);
+
 
     List<Customer> GetAllCustomers();
 
@@ -35,12 +37,18 @@ public interface IBL
     List<Product> AllProducts();
 
     Product GetProductById(int productId);
+
+    List<CustomerCart> GetCart();
     void AddProduct(Product productToAdd);
+
+    void AddToOrders(decimal Total, int StoreId, int CustomerId, string OrderDate);
 
     public void DeleteStore(int storeId);
 
     public void DeleteCustomer(int CustomerId);
 
     public void DeleteProduct(int ProductId);
+
+    public void ClearCart();
 
 }

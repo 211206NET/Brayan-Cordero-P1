@@ -9,6 +9,8 @@ public interface IRepo
     void AddStore(StoreAddressOnly StoreToAdd);
     void AddToInventory(AddtoInventory inventoryToAdd);
 
+    void AddToCart(Cart addToCart);
+
     List<Customer> GetAllCustomers();
 
     void AddCustomer(Customer CustomerToAdd);
@@ -29,13 +31,19 @@ public interface IRepo
 
     Product GetProductById(int productId);
 
+    List<CustomerCart> GetCart();
+
     void AddProduct(Product productToAdd);
+
+    void AddToOrders(decimal Total, int StoreId, int CustomerId, string OrderDate);
 
     public void DeleteStore(int storeId);
 
     public void DeleteCustomer(int CustomerId);
 
     public void DeleteProduct(int ProductId);
+
+    public void ClearCart();
 
 
 }

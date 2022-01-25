@@ -58,9 +58,12 @@ namespace StoreWebApp.Controllers
             }
         }
 
+      
+
         // POST api/<CustomerController>
-        [HttpPost]
-        public ActionResult Post([FromBody] Customer customerToAdd)
+        [HttpPost("[action]")]
+        [ActionName("CreateAccount")]
+        public ActionResult CreateAccount([FromBody] Customer customerToAdd)
         {
             try
             {
@@ -71,6 +74,52 @@ namespace StoreWebApp.Controllers
             {
                 return Conflict(ex.Message);
             }
+        }
+
+        // POST api/<CustomerController>
+        [HttpPost("[action]")]
+        [ActionName("AddToCart")]
+        public ActionResult AddToCart([FromBody] Cart AddToCart)
+        {
+           
+                _bl.AddToCart(AddToCart);
+                return Created("Successfully added", AddToCart);
+            
+        }
+
+        // GET api/<StoreController>/5
+        [HttpGet("[action]")]
+        [ActionName("SeeCart")]
+        public ActionResult<List<CustomerCart>> GetCart()
+        {
+
+            return _bl.GetCart();
+
+        }
+
+        // POST api/<CustomerController>
+        [HttpPost("[action]")]
+        [ActionName("Checkout")]
+        public ActionResult Chechout([FromBody] InfoForCheckout infoForCheckout)
+        {
+            string OrderDate = DateOnly.FromDateTime(DateTime.Now).ToString();
+            List<CustomerCart> cart = _bl.GetCart();
+            Checkout checkout = new Checkout();
+            checkout.cart = cart;
+            checkout.CalculateTotal();
+
+            if (checkout.cartTotal != 0)
+            {
+                _bl.AddToOrders(checkout.cartTotal, infoForCheckout.StoreId, infoForCheckout.CustomerId, OrderDate);
+                _bl.ClearCart();
+
+                return Content($"Successfully Checkout \n Total: {checkout.cartTotal} \n, Thank you for your purchase :)");
+            }
+            else 
+            {
+                return Content("You have no items in your cart.");
+            }
+           
         }
 
         // PUT api/<CustomerController>/5
